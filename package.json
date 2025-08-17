@@ -11,9 +11,13 @@
   "devDependencies": {
     "@types/three": "^0.179.0",
     "typescript": "~5.8.3",
-    "vite": "^7.1.2"
+    "vite": "^7.1.2",
+    "vite-plugin-top-level-await": "^1.6.0",
+    "vite-plugin-wasm": "^3.5.0"
   },
   "dependencies": {
+    "@dimforge/rapier3d": "^0.18.2",
+    "stats.js": "^0.17.0",
     "three": "^0.179.1"
   }
 }
