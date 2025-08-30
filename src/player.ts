@@ -4,6 +4,7 @@ import {
   Mesh,
   MeshStandardMaterial,
   Object3D,
+  Quaternion,
   Vector3,
 } from "three";
 import type { Entity } from "./game";
@@ -18,6 +19,10 @@ export class Player implements Entity {
   private radius: number;
   private height: number;
   private velocity: Vector3;
+  private horizontal: number = 0;
+  private vertical: number = 0;
+  rotationSpeed: number = 20;
+  moveSpeed: number = 100;
   node: Object3D | null = null;
   colliderDesc: ColliderDesc | null = null;
   rigidBodyDesc: RigidBodyDesc | null = null;
@@ -60,9 +65,25 @@ export class Player implements Entity {
   }
 
   update(dt: number): void {
-    const horizontal = inputManager.getInput("horizontal");
-    const vertical = inputManager.getInput("vertical");
-    this.move(new Vector3(horizontal, 0, vertical), 1);
+    this.horizontal = inputManager.getInput("horizontal");
+    this.vertical = inputManager.getInput("vertical");
+    const movementDirection = new Vector3(
+      this.horizontal,
+      0,
+      this.vertical
+    ).normalize();
+
+    if (movementDirection.length() > 0 && this.node) {
+      const targetQuaternion = new Quaternion();
+      targetQuaternion.setFromUnitVectors(
+        new Vector3(0, 0, 1),
+        movementDirection
+      );
+
+      this.node.quaternion.slerp(targetQuaternion, this.rotationSpeed * dt);
+    }
+
+    this.move(movementDirection, this.moveSpeed * dt);
 
     if (this.node && this.rigidBody) {
       this.rigidBody?.setLinvel(
@@ -75,13 +96,16 @@ export class Player implements Entity {
       );
 
       const p = this.rigidBody.translation();
-      const q = this.rigidBody.rotation();
       this.node.position.set(p.x, p.y, p.z);
-      this.node.quaternion.set(q.x, q.y, q.z, q.w);
     }
   }
 
   move(direction: Vector3, speed: number) {
+    if (speed <= 0 || direction.length() === 0) {
+      this.velocity = new Vector3(0, this.rigidBody?.linvel().y ?? 0, 0);
+      return;
+    }
+
     direction.x = direction.x * speed;
     direction.y = this.rigidBody?.linvel().y ?? 0;
     direction.z = direction.z * speed;

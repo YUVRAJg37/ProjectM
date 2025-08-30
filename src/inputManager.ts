@@ -5,11 +5,15 @@ type InputValue = {
 export class InputManager {
   private horizontal: InputValue = { value: 0 };
   private vertical: InputValue = { value: 0 };
+  private mouseX: InputValue = { value: 0 };
+  private mouseY: InputValue = { value: 0 };
   private inputMap: Map<string, InputValue> = new Map();
 
   constructor() {
     this.inputMap.set("horizontal", this.horizontal);
     this.inputMap.set("vertical", this.vertical);
+    this.inputMap.set("mouseX", this.mouseX);
+    this.inputMap.set("mouseY", this.mouseY);
 
     this.init();
   }

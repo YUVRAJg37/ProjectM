@@ -2,13 +2,15 @@ import { InputManager } from "./inputManager";
 import type { Game } from "./game";
 import type { PhysicsManager } from "./physics";
 import type { CameraManager } from "./camera";
+import type { Player } from "./player";
 
 let inputManager: InputManager;
 let camera: CameraManager;
 let game: Game;
 let physicsManager: PhysicsManager;
+let player: Player;
 
-export function setInputmanager(value: InputManager) {
+export function setInputManager(value: InputManager) {
   inputManager = value;
 }
 
@@ -24,4 +26,8 @@ export function setPhysicsManager(value: PhysicsManager) {
   physicsManager = value;
 }
 
-export { inputManager, camera, game, physicsManager };
+export function setPlayer(value: Player) {
+  player = value;
+}
+
+export { inputManager, camera, game, physicsManager, player };
