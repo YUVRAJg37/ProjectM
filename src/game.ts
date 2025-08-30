@@ -4,6 +4,7 @@ import type {
   RigidBodyDesc,
 } from "@dimforge/rapier3d";
 import {
+  AxesHelper,
   Color,
   Object3D,
   PerspectiveCamera,
@@ -11,7 +12,7 @@ import {
   Vector2,
   WebGLRenderer,
 } from "three";
-import type { PhysicsManager } from "./physics";
+import { physicsManager } from "./core";
 
 export interface Entity {
   node: Object3D | null;
@@ -26,7 +27,6 @@ export interface Entity {
 export class Game {
   private scene = new Scene();
   private camera: PerspectiveCamera | null;
-  private physics: PhysicsManager | null;
   private entities: Entity[] = [];
   private renderer: WebGLRenderer;
   private size = new Vector2(1, 1);
@@ -34,22 +34,24 @@ export class Game {
   constructor(
     renderer: WebGLRenderer,
     container: HTMLElement,
-    camera: PerspectiveCamera,
-    physics: PhysicsManager
+    camera: PerspectiveCamera
   ) {
     this.renderer = renderer;
     this.size.set(container.clientWidth, container.clientHeight);
     this.camera = null;
     this.setCamera(camera);
-    this.physics = physics;
   }
 
   init() {
     this.scene.background = new Color(0xfae4c2);
+
+    const axesHelper = new AxesHelper(10);
+    this.scene.add(axesHelper);
+
     for (const e of this.entities) {
       e.init();
       this.addToScene(e);
-      this.addCollider(e);
+      physicsManager.addCollider(e);
     }
   }
 
@@ -67,18 +69,6 @@ export class Game {
   private addToScene(entity: Entity) {
     if (!entity.node) return;
     this.scene.add(entity.node);
-  }
-
-  private addCollider(entity: Entity) {
-    if (entity.colliderDesc && entity.rigidBodyDesc) {
-      let rigidBody = this.physics?.world?.createRigidBody(
-        entity.rigidBodyDesc
-      );
-      entity.rigidBody = rigidBody;
-      this.physics?.world?.createCollider(entity.colliderDesc, rigidBody);
-    } else if (entity.colliderDesc) {
-      this.physics?.world?.createCollider(entity.colliderDesc);
-    }
   }
 
   setCamera(camera: PerspectiveCamera) {

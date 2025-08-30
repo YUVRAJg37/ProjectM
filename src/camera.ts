@@ -11,11 +11,13 @@ export class CameraManager {
       100
     );
 
-    this.camera.position.set(0, -5, 5);
-    this.camera.rotation.set(1, 0, 0);
+    this.camera.position.set(0, 10, 0);
+    this.camera.rotation.set(-Math.PI / 2, 0, -Math.PI / 2);
   }
 
   getCameraRef(): PerspectiveCamera {
     return this.camera;
   }
+
+  update() {}
 }

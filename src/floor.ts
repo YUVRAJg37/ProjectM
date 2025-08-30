@@ -24,9 +24,9 @@ export class Floor implements Entity {
     });
     this.node = new Mesh(boxGeo, boxMat);
     this.colliderDesc = RAPIER.ColliderDesc.cuboid(
-      this.size.x,
-      this.size.y,
-      this.size.z
+      this.size.x / 2,
+      this.size.y / 2,
+      this.size.z / 2
     );
   }
 }
