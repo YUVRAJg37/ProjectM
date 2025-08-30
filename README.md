@@ -9,7 +9,7 @@ Follow these steps to try the latest build:
 1. **Clone the Repository**
 
    ```bash
-   git clone <repository-url>
+   git clone git@github.com:YUVRAJg37/ProjectM.git
    cd projectM
    ```
 
