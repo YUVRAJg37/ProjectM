@@ -32,6 +32,10 @@ Follow these steps to try the latest build:
 
 - Use **WASD** keys to run.
 
+## Screenshots
+
+![Movement and Camera](./screenshots/1_movement_camera.png)
+
 ## Requirements
 
 - Node.js and npm installed
